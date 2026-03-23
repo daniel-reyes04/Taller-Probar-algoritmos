@@ -72,3 +72,25 @@ python main.py
 - `src/evaluation.py`: matriz de confusion y metricas principales.
 - `src/models/logistic_model.py`: baseline.
 - `src/models/random_forest_model.py`: modelo ajustado.
+
+## 8) Scripts individuales incorporados del remoto
+
+Adicionalmente, el repositorio incluye scripts separados para otros algoritmos:
+
+- `RED NEURONAL.py`
+- `ARBOLES DE DESICION.py`
+- `Máquinas de Vector de Soporte.py`
+
+Dataset usado por estos scripts:
+
+- `coffee_shop_revenue.csv`
+
+Ejecucion manual (si deseas correrlos por separado):
+
+```bash
+python "RED NEURONAL.py"
+python "ARBOLES DE DESICION.py"
+python "Máquinas de Vector de Soporte.py"
+```
+
+Nota: algunos de estos scripts abren figuras y pueden pausar la ejecucion hasta cerrar la ventana.
