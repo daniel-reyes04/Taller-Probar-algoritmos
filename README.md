@@ -1,95 +1,169 @@
-# Coffee ML Pipeline
+# Coffee ML Pipeline - Guia Tecnica para macOS
 
-Proyecto de clasificacion multiclase de ingresos diarios de cafeteria.
+Proyecto de clasificacion multiclase para ingresos diarios de cafeteria, orientado a ejecucion local en macOS.
 
-## Resumen
+## Objetivo tecnico
 
-El proyecto ejecuta 5 algoritmos desde un unico punto de entrada:
-- Logistic Regression
-- Random Forest
-- Arbol de Decision
-- SVM
-- Red Neuronal (MLP)
+Ejecutar desde un solo entry point (`main.py`) un pipeline de 5 algoritmos:
+1. Logistic Regression
+2. Random Forest
+3. Arbol de Decision
+4. SVM
+5. Red Neuronal (MLP)
 
-La ejecucion principal esta en main.py y usa una sola fuente de datos en data/coffee_shop_revenue.csv.
+Fuente unica de datos:
+- `data/coffee_shop_revenue.csv`
 
-## Estructura
+## Requisitos para macOS
 
-- main.py
-- README.md
-- requirements.txt
-- data/coffee_shop_revenue.csv
-- src/data_preparation.py
-- src/feature_engineering.py
-- src/evaluation.py
-- src/models/logistic_model.py
-- src/models/random_forest_model.py
-- src/models/decision_tree_pipeline.py
-- src/models/svm_pipeline.py
-- src/models/mlp_pipeline.py
-- src/models/run_peer_pipelines.py
-- report/
+Versiones recomendadas:
+1. macOS 12+
+2. Python 3.10 a 3.12
+3. `pip` actualizado
+4. Terminal (`zsh`) o iTerm2
 
-## Ejecucion
+Dependencias del sistema:
+1. Xcode Command Line Tools
+2. (Opcional) Homebrew
 
-1. Instalar dependencias:
+Instalar command line tools:
 
 ```bash
+xcode-select --install
+```
+
+## Setup rapido en macOS
+
+Desde la raiz del proyecto:
+
+```bash
+cd /ruta/a/coffe_ML
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-2. Ejecutar pipeline:
+Validacion de entorno:
+
+```bash
+python --version
+pip --version
+```
+
+## Estructura del proyecto
+
+Archivos principales:
+1. `main.py`
+2. `requirements.txt`
+3. `data/coffee_shop_revenue.csv`
+
+Modulos de codigo:
+1. `src/data_preparation.py`
+2. `src/feature_engineering.py`
+3. `src/evaluation.py`
+4. `src/models/logistic_model.py`
+5. `src/models/random_forest_model.py`
+6. `src/models/decision_tree_pipeline.py`
+7. `src/models/svm_pipeline.py`
+8. `src/models/mlp_pipeline.py`
+9. `src/models/run_peer_pipelines.py`
+
+Salidas:
+1. `report/logistic_regression/`
+2. `report/random_forest/`
+3. `report/arbol_decision/`
+4. `report/svm/`
+5. `report/red_neuronal/`
+6. `report/informe.md`
+
+## Ejecucion en macOS
+
+Con entorno virtual activo:
 
 ```bash
 python main.py
 ```
 
-## Flujo de main.py
+El flujo ejecuta:
+1. Carga y preparacion de datos
+2. Clasificacion del target por terciles (`0`, `1`, `2`)
+3. Entrenamiento y evaluacion por algoritmo
+4. Generacion de matrices de confusion e imagenes
+5. Escritura de informe tecnico en `report/informe.md`
 
-1. Carga datos desde data/coffee_shop_revenue.csv.
-2. Prepara y clasifica Daily_Revenue en 3 clases: 0, 1, 2.
-3. Entrena Logistic Regression y Random Forest.
-4. Ejecuta Arbol, SVM y MLP desde src/models/run_peer_pipelines.py.
-5. Genera reportes por algoritmo en report/.
+## Modelo de datos
 
-## Reportes generados
-
-Por cada algoritmo se generan salidas en su carpeta:
-
-- report/logistic_regression/
-- report/random_forest/
-- report/arbol_decision/
-- report/svm/
-- report/red_neuronal/
-
-Ademas, se genera:
-
-- report/informe.md
-
-Nota: la comparativa global en codigo y graficas fue removida para simplificar la ejecucion y evitar errores.
-
-## Variables
-
-Features:
-- Number_of_Customers_Per_Day
-- Average_Order_Value
-- Location_Foot_Traffic
-- Marketing_Spend_Per_Day
-- Number_of_Employees
-- Operating_Hours_Per_Day
+Features de entrada:
+1. `Number_of_Customers_Per_Day`
+2. `Average_Order_Value`
+3. `Location_Foot_Traffic`
+4. `Marketing_Spend_Per_Day`
+5. `Number_of_Employees`
+6. `Operating_Hours_Per_Day`
 
 Target:
-- Daily_Revenue, transformado a 3 clases con terciles.
+1. `Daily_Revenue`
+2. Transformado a 3 clases por terciles
 
-## Troubleshooting
+## Reportes y artefactos
 
-- Si falta el dataset, verificar data/coffee_shop_revenue.csv.
-- Si hay warning de convergencia en Logistic Regression, no bloquea la ejecucion.
-- Si VS Code muestra errores antiguos de archivos borrados, recargar la ventana.
+Por cada algoritmo se espera al menos:
+1. `confusion_matrix.png`
+2. `metricas.csv` (si aplica en ese pipeline)
+
+Adicionales por modelo:
+1. Arbol: `arbol_decision.png`, `importancias.png`
+2. MLP: `loss_curve.png`
+
+Informe general:
+1. `report/informe.md`
+
+## Troubleshooting macOS
+
+### Error: comando `python` no encontrado
+
+Usar `python3`:
+
+```bash
+python3 main.py
+```
+
+### Error: entorno virtual no activo
+
+Activar:
+
+```bash
+source .venv/bin/activate
+```
+
+### Error: dataset no encontrado
+
+Verificar existencia de:
+1. `data/coffee_shop_revenue.csv`
+
+### Warning de convergencia en Logistic Regression
+
+No bloquea la ejecucion. Es warning, no error fatal.
+
+### Problemas con dependencias en Mac ARM (M1/M2/M3)
+
+Actualizar `pip` y reinstalar dependencias:
+
+```bash
+python -m pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt --no-cache-dir
+```
+
+## Operacion recomendada
+
+1. Mantener solo `main.py` como entry point
+2. No usar scripts legacy fuera de `src/models`
+3. Ejecutar siempre con entorno virtual activo
+4. Versionar cambios con commits pequenos y descriptivos
 
 ## Estado actual
 
-- Punto de entrada unico: main.py
-- Scripts legacy en raiz: eliminados
-- Pipeline modular en src/models: activo
-- Reportes por algoritmo: activos
+1. Pipeline modular activo en `src/models`
+2. Reportes por algoritmo activos en `report/`
+3. Entry point unico: `main.py`
