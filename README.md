@@ -1,127 +1,95 @@
-# Taller - Probar Algoritmos (Ingresos de Cafeterias)
+# Coffee ML Pipeline
 
-Repositorio para comparar algoritmos de Machine Learning en la prediccion del ingreso diario de cafeterias.
+Proyecto de clasificacion multiclase de ingresos diarios de cafeteria.
 
-## 1) Objetivo
+## Resumen
 
-Comparar el desempeno de 5 algoritmos de clasificacion con el mismo conjunto de datos:
+El proyecto ejecuta 5 algoritmos desde un unico punto de entrada:
+- Logistic Regression
+- Random Forest
+- Arbol de Decision
+- SVM
+- Red Neuronal (MLP)
 
-1. Regresion Logistica
-2. Maquinas de Vector de Soporte (SVM)
-3. Arboles de Decision
-4. Random Forest
-5. Red Neuronal Artificial (MLP)
+La ejecucion principal esta en main.py y usa una sola fuente de datos en data/coffee_shop_revenue.csv.
 
-## 2) Datos y variables
+## Estructura
 
-Variables de entrada `X`:
+- main.py
+- README.md
+- requirements.txt
+- data/coffee_shop_revenue.csv
+- src/data_preparation.py
+- src/feature_engineering.py
+- src/evaluation.py
+- src/models/logistic_model.py
+- src/models/random_forest_model.py
+- src/models/decision_tree_pipeline.py
+- src/models/svm_pipeline.py
+- src/models/mlp_pipeline.py
+- src/models/run_peer_pipelines.py
+- report/
 
-- `Number_of_Customers_Per_Day`
-- `Average_Order_Value`
-- `Location_Foot_Traffic`
-- `Marketing_Spend_Per_Day`
-- `Number_of_Employees`
-- `Operating_Hours_Per_Day`
+## Ejecucion
 
-Variable objetivo original `y`:
-
-- `Daily_Revenue`
-
-Transformacion de `y` para clasificacion multiclase:
-
-- `Bajo (0)`
-- `Medio (1)`
-- `Alto (2)`
-
-La separacion se realiza por terciles (cuantiles).
-
-## 3) Estructura del proyecto
-
-```text
-coffe_ML/
-|- data/
-|  |- coffee_shop_revenue.csv
-|- src/
-|  |- data_preparation.py
-|  |- feature_engineering.py
-|  |- evaluation.py
-|  |- models/
-|     |- logistic_model.py
-|     |- random_forest_model.py
-|- main.py
-|- ARBOLES DE DESICION.py
-|- Máquinas de Vector de Soporte.py
-|- RED NEURONAL.py
-|- report/
-|- README.md
-|- requirements.txt
-```
-
-## 4) Organizacion sin solapamientos
-
-Para evitar solapamiento de responsabilidades:
-
-- `main.py` ejecuta el flujo modular de `src/` y compara Logistic Regression + Random Forest.
-- Los scripts independientes en raiz ejecutan cada algoritmo adicional de forma autonoma:
-	- `ARBOLES DE DESICION.py`
-	- `Máquinas de Vector de Soporte.py`
-	- `RED NEURONAL.py`
-- Las salidas del flujo modular se guardan en `report/`, con subdirectorios por algoritmo.
-
-## 5) Metricas de evaluacion
-
-Metricas usadas para comparacion (multiclase):
-
-1. `exactitud`
-2. `precision_macro`
-3. `sensibilidad_macro`
-4. `f1_macro`
-5. `f1_weighted`
-
-Matriz de confusion:
-
-- Filas: valores reales
-- Columnas: valores predichos
-
-## 6) Ejecucion
-
-Instalar dependencias:
+1. Instalar dependencias:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 6.1 Flujo principal (modular)
+2. Ejecutar pipeline:
 
 ```bash
 python main.py
 ```
 
-### 6.2 Scripts individuales por algoritmo
+## Flujo de main.py
 
-```bash
-python "ARBOLES DE DESICION.py"
-python "Máquinas de Vector de Soporte.py"
-python "RED NEURONAL.py"
-```
+1. Carga datos desde data/coffee_shop_revenue.csv.
+2. Prepara y clasifica Daily_Revenue en 3 clases: 0, 1, 2.
+3. Entrena Logistic Regression y Random Forest.
+4. Ejecuta Arbol, SVM y MLP desde src/models/run_peer_pipelines.py.
+5. Genera reportes por algoritmo en report/.
 
-## 7) Salidas en report/
+## Reportes generados
 
-Salida principal:
+Por cada algoritmo se generan salidas en su carpeta:
 
-- `report/metricas_comparacion.csv`
-- `report/comparacion_metricas.png`
-- `report/informe.md`
+- report/logistic_regression/
+- report/random_forest/
+- report/arbol_decision/
+- report/svm/
+- report/red_neuronal/
 
-Subdirectorios por algoritmo del flujo modular:
+Ademas, se genera:
 
-- `report/logistic_regression_baseline/`
-	- `confusion_matrix.png`
-	- `metricas.csv`
-- `report/random_forest_tuned/`
-	- `confusion_matrix.png`
-	- `metricas.csv`
+- report/informe.md
 
-## 8) Nota de reproducibilidad
+Nota: la comparativa global en codigo y graficas fue removida para simplificar la ejecucion y evitar errores.
 
-Se usa `random_state=42` en entrenamiento y division de datos para mantener comparabilidad entre ejecuciones.
+## Variables
+
+Features:
+- Number_of_Customers_Per_Day
+- Average_Order_Value
+- Location_Foot_Traffic
+- Marketing_Spend_Per_Day
+- Number_of_Employees
+- Operating_Hours_Per_Day
+
+Target:
+- Daily_Revenue, transformado a 3 clases con terciles.
+
+## Troubleshooting
+
+- Si falta el dataset, verificar data/coffee_shop_revenue.csv.
+- Si hay warning de convergencia en Logistic Regression, no bloquea la ejecucion.
+- Si VS Code muestra errores antiguos de archivos borrados, recargar la ventana.
+
+## Estado actual
+
+- Punto de entrada unico: main.py
+- Scripts legacy en raiz: eliminados
+- Pipeline modular en src/models: activo
+- Reportes por algoritmo: activos
