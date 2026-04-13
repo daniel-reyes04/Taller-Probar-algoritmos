@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -19,7 +20,7 @@ FEATURE_COLUMNS = [
 ]
 
 
-def run_decision_tree_pipeline(df, report_dir: Path):
+def run_decision_tree_pipeline(df, report_dir: Path, model_dir: Path = None):
     report_dir.mkdir(parents=True, exist_ok=True)
 
     X = df[FEATURE_COLUMNS]
@@ -32,7 +33,9 @@ def run_decision_tree_pipeline(df, report_dir: Path):
         random_state=42,
     )
 
-    model = DecisionTreeClassifier(max_depth=4, criterion="entropy", ccp_alpha=0.0, random_state=42)
+    model = DecisionTreeClassifier(
+        max_depth=4, criterion="entropy", ccp_alpha=0.0, random_state=42
+    )
     model.fit(X_train, y_train)
 
     eval_labels = [0, 1, 2]
@@ -82,6 +85,10 @@ def run_decision_tree_pipeline(df, report_dir: Path):
     plt.close()
 
     pd.DataFrame([metrics]).to_csv(report_dir / "metricas.csv", index=False)
+
+    if model_dir:
+        model_dir.mkdir(parents=True, exist_ok=True)
+        joblib.dump(model, model_dir / "decision_tree.joblib")
 
     return {
         "modelo": "Arbol de Decision",

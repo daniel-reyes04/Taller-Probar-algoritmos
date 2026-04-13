@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -20,7 +21,7 @@ FEATURE_COLUMNS = [
 ]
 
 
-def run_svm_pipeline(df, report_dir: Path):
+def run_svm_pipeline(df, report_dir: Path, model_dir: Path = None):
     report_dir.mkdir(parents=True, exist_ok=True)
 
     X = df[FEATURE_COLUMNS]
@@ -63,6 +64,11 @@ def run_svm_pipeline(df, report_dir: Path):
     plt.close()
 
     pd.DataFrame([metrics]).to_csv(report_dir / "metricas.csv", index=False)
+
+    if model_dir:
+        model_dir.mkdir(parents=True, exist_ok=True)
+        joblib.dump(model, model_dir / "svm.joblib")
+        joblib.dump(scaler, model_dir / "svm_scaler.joblib")
 
     return {
         "modelo": "SVM",
