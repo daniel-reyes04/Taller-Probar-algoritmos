@@ -76,6 +76,7 @@ Salidas:
 4. `report/svm/`
 5. `report/red_neuronal/`
 6. `report/informe.md`
+7. `models/*.joblib`
 
 ## Ejecucion en macOS
 
@@ -118,6 +119,39 @@ Adicionales por modelo:
 
 Informe general:
 1. `report/informe.md`
+
+Artefactos de implementacion (persistencia de modelos):
+1. `models/logistic_regression.joblib`
+2. `models/random_forest.joblib`
+3. `models/decision_tree.joblib`
+4. `models/svm.joblib`
+5. `models/svm_scaler.joblib`
+6. `models/neural_network.joblib`
+7. `models/neural_network_scaler.joblib`
+
+Para que sirven los `.joblib`:
+1. Reutilizar modelos entrenados sin reentrenar.
+2. Mantener reproducibilidad entre ejecuciones.
+3. Preparar el proyecto para inferencia/despliegue.
+4. Conservar el preprocesamiento correcto (escaladores de SVM y MLP).
+
+## Ciclo de vida de Machine Learning (resumen)
+
+1. Planificacion
+	- Definicion del problema de clasificacion multiclase de ingresos.
+2. Preparacion de datos
+	- Carga de datos, limpieza inicial, seleccion de features y transformacion del target por terciles.
+3. Ingenieria de modelos
+	- Entrenamiento de Logistic Regression, Random Forest, Arbol de Decision, SVM y MLP.
+4. Evaluacion del modelo
+	- Metricas: exactitud, precision macro, sensibilidad macro, F1 macro y F1 weighted.
+	- Matriz de confusion 3x3 por algoritmo.
+	- Ajuste de hiperparametros con validacion cruzada (5-fold) para Random Forest.
+5. Implementacion del modelo
+	- Guardado de modelos y escaladores en archivos `.joblib` dentro de `models/`.
+6. Supervision y mantenimiento
+	- En este taller no hay monitoreo en produccion.
+	- Recomendado para uso real: monitorear metricas, detectar drift y reentrenar periodicamente.
 
 ## Troubleshooting macOS
 
