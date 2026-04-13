@@ -18,161 +18,99 @@
 
 ---
 
-## 2. Ciclo de Vida de Machine Learning (CRISP-ML(Q))
+## 2. Ciclo de Vida de Machine Learning
 
-### 2.1 Planificación ✅
-
-**Evaluación del alcance y viabilidad:**
-- ¿Necesitamos machine learning? Sí, para predecir niveles de ingresos
-- ¿Es viable? El dataset tiene 2000 ejemplos suficientes
-
-**Métricas de éxito definidas:**
-- Negocio: Clasificación correcta de ingresos (Bajo/Medio/Alto)
-- ML: Accuracy ≥ 80%, F1-Score ≥ 0.75
-
-**Análisis de disponibilidad de datos:**
-- ✅ Datos disponibles en Kaggle
-- ✅ Distribución de clases balanceada (terciles)
-- ✅ Variables relevantes para el problema
-
-**Limitaciones consideradas:**
-- Limitaciones legales: Datos públicos y éticos
-- Robustez: Validación con train/test split
+| Paso | Descripción | Estado | Archivo/Función |
+|------|-------------|--------|-----------------|
+| 1. Planificación | Definición del problema y objetivos | ✅ Completado | Planteamiento del proyecto |
+| 2. Preparación de datos | Carga, limpieza, selección de features | ✅ Completado | `src/data_preparation.py` |
+| 3. Ingeniería de modelos | Entrenamiento de 5 algoritmos | ✅ Completado | `src/models/*.py` |
+| 4. Evaluación del modelo | Métricas y matrices de confusión | ✅ Completado | `src/evaluation.py` |
+| 5. Implementación del modelo | Guardado de modelos entrenados | ✅ Completado | `src/model_deploy.py`, carpeta `models/` |
+| 6. Supervisión y mantenimiento | No aplica (trabajo académico) | N/A | - |
 
 ---
 
-### 2.2 Preparación de Datos ✅
+## 3. Metodología
 
-**Recopilación de datos:**
-- Carga del dataset desde CSV
-- Eliminación de valores nulos
-
-**Limpieza de datos:**
-- dropna() para valores faltantes
-- Verificación de tipos de datos
-
-**Tratamiento de datos:**
-- Selección de 6 features relevantes
-- Categorización de variable objetivo (cuantiles/terciles)
-- Normalización para SVM y Red Neuronal
-
-**Gestión de datos:**
-- División 80% entrenamiento, 20% prueba
+### 3.1 Preparación de Datos
+- División de datos: 80% entrenamiento, 20% prueba
 - Estratificación por clase
+- Manejo de valores nulos
+- Categorización de la variable objetivo usando cuantiles (terciles)
 
----
-
-### 2.3 Ingeniería de Modelos ✅
-
-**Algoritmos implementados (5 modelos):**
-1. Regresión Logística (baseline)
-2. Máquinas de Vector de Soporte (SVM)
-3. Árbol de Decisión
-4. Random Forest (con GridSearchCV)
-5. Red Neuronal (MLP)
-
-**Definición de métricas:**
-- Accuracy (exactitud)
-- Precision
-- Recall
-- F1-Score
-
-**Entrenamiento y validación:**
-- Validación cruzada 5-fold para Random Forest
-- Train/test split con random_state=42
-
----
-
-### 2.4 Evaluación del Modelo ✅
-
-**Pruebas realizadas:**
-- Evaluación en conjunto de datos de prueba (20%)
+### 3.2 Protocolo de Evaluación
+- Métricas: Accuracy, Precision, Recall, F1-Score
+- Validación cruzada (5-fold) para Random Forest
 - Matriz de confusión 3x3
-- Reportes de clasificación por clase
-
-**Métricas obtenidas:**
-
-| Algoritmo | Accuracy | F1-Score (Macro) |
-|-----------|----------|------------------|
-| **SVM** | **0.90** | **0.89** |
-| Red Neuronal | 0.89 | 0.89 |
-| Regresión Logística | 0.8475 | 0.8480 |
-| Random Forest | 0.82 | 0.8204 |
-| Árbol de Decisión | 0.78 | 0.78 |
-
-**Análisis de resultados:**
-- ✅ Mejor modelo: SVM con 90% accuracy
-- ✅ Cumplimiento de métricas de éxito (≥80%)
-- ✅ Modelo listo para implementación
 
 ---
 
-### 2.5 Implementación del Modelo ✅
+## 4. Resultados
 
-**Modelos guardados (carpeta `models/`):**
+### 4.1 Tabla Comparativa de Métricas
+
+| Algoritmo | Accuracy | Precision (Macro) | Recall (Macro) | F1-Score (Macro) | F1-Score (Weighted) |
+|-----------|----------|-------------------|----------------|------------------|---------------------|
+| **SVM** | **0.90** | **0.90** | **0.89** | **0.89** | **0.90** |
+| Red Neuronal | 0.89 | 0.89 | 0.89 | 0.89 | 0.89 |
+| Regresión Logística | 0.8475 | 0.8490 | 0.8474 | 0.8480 | 0.8482 |
+| Random Forest | 0.82 | 0.8213 | 0.8198 | 0.8204 | 0.8206 |
+| Árbol de Decisión | 0.78 | 0.78 | 0.77 | 0.78 | 0.78 |
+
+### 4.2 Mejor Modelo: **SVM (Máquinas de Vector de Soporte)**
+- Accuracy: 90%
+- Precision clase Bajo: 0.94
+- Precision clase Medio: 0.81
+- Precision clase Alto: 0.93
+
+---
+
+## 5. Conclusiones
+
+1. **SVM es el mejor algoritmo** para este dataset con un 90% de accuracy
+2. **Red Neuronal** también muestra buen rendimiento (89%)
+3. **Random Forest** con ajuste de hiperparámetros no supera a SVM
+4. **Árbol de Decisión** tiene el menor rendimiento pero permite interpretación
+
+### Recomendación
+Para implementar en producción, se recomienda **SVM** por su mayor accuracy y estabilidad.
+
+---
+
+## 6. Archivos Generados
+
+### Modelos guardados (carpeta `models/`):
 - logistic_regression.joblib
 - random_forest.joblib
 - decision_tree.joblib
 - svm.joblib + svm_scaler.joblib
 - neural_network.joblib + neural_network_scaler.joblib
 
-**Formato de despliegue:**
-- Formato joblib (serialización)
-- Listo para carga con joblib.load()
-
-**Acceso a predicciones:**
-- Mediante API o aplicación web
-- Función load_model() disponible en model_deploy.py
-
----
-
-### 2.6 Supervisión y Mantenimiento ⚠️
-
-**Estado:** No implementado (trabajo académico)
-
-**En producción real se requeriría:**
-- Monitoreo de métricas del modelo
-- Alertas automáticas por degradación
-- Reentrenamiento periódico con nuevos datos
-- Control de versiones de modelos
+### Reportes (carpeta `report/`):
+- Informe general (este archivo)
+- Tabla comparativa de métricas
+- Matrices de confusión por algoritmo
+- Árbol de decisión visual
+- Importancia de variables
+- Curva de aprendizaje (Red Neuronal)
+- Métricas CSV por algoritmo
 
 ---
 
-## 3. Conclusiones
-
-1. **SVM es el mejor algoritmo** para este dataset con 90% de accuracy
-2. **Red Neuronal** también muestra buen rendimiento (89%)
-3. Todos los modelos superan el umbral de 80% establecido
-4. Los modelos están guardados y listos para implementación
-
-### Recomendación Final
-Para implementar en producción, se recomienda **SVM** por su mayor accuracy, velocidad de inferencia y estabilidad.
-
----
-
-## 4. Archivos Generados
-
-### Modelos (carpeta `models/`): 7 archivos
-### Reportes (carpeta `report/`): 
-- informe.md (este archivo)
-- tabla_comparativa.md
-- metricas.csv por algoritmo
-- Visualizaciones: matrices de confusión, árbol, curva de aprendizaje
-
----
-
-## 5. Ejecución
+## 7. Ejecución del Proyecto
 
 ```bash
-# Ejecutar pipeline
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar pipeline completo
 python main.py
 
-# Cargar modelo para predicciones
-import joblib
-model = joblib.load("models/svm.joblib")
+# Los modelos se guardan en la carpeta models/
+# Los reportes se guardan en la carpeta report/
 ```
 
 ---
 
-*Informe basado en metodología CRISP-ML(Q)*
-*Proyecto desarrollado para el taller de Machine Learning*
+*Proyecto desarrollado como parte del taller de predicción de Machine Learning*
